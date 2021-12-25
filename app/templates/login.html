@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Welcome to Causal COLA</title>
+        <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='css/font-awesome.css') }}">   
+        <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='css/login-style.css') }}">   
+    </head>
+    <body>
+        <div class="container">
+            <img src="{{ url_for('static',filename='img/umich_icon.jpeg') }}">
+            <h2 style="color: #FFCB05;">Welcome to the Causal COLA Platform</h2>
+            {% if error %}
+                <p class="error" style="color: red;"><strong>Error:</strong> {{ error }}
+            {% endif %}
+             <form action="" method="post">
+                <div class="form-input">
+                    <input type="text" name="username" placeholder="Enter your UserName" value="{{
+                        request.form.username }}"></input>
+                </div>
+                <div class="form-input">
+                    <input type="password" name="password" placeholder="Enter your Password" value="{{
+                        request.form.password }}"></input>
+                </div>
+                <input type="submit" name="submit" value="Login" class="btn-login"></input><br/>
+                <a href="https://mengtongh.github.io/"> Do not have an account?  Contact Us</a><br/><br/>
+            </form>
+
+        </div>
+    </body>
+</html>
