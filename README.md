@@ -5,7 +5,6 @@ Causal-COLA is a collaborative platform for institutions to make causal inferenc
 ## Built With
 
 * [Flask](https://flask.palletsprojects.com/en/2.0.x/) 
-* [R](https://www.r-project.org/) 
 * [Python](https://www.python.org/) 
 * [Javascript](https://www.javascript.com/) / [HTML](https://html.spec.whatwg.org/multipage/) / [CSS](https://www.w3.org/Style/CSS/Overview.en.html)
 
