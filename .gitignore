@@ -11,3 +11,5 @@ ENV/
 flask_session/
 
 *.DS_Store
+*/data/
+*/archived_data/

@@ -13,6 +13,7 @@ app.config['SESSION_TYPE'] = 'filesystem'
 app.config['SECRET_KEY'] = 'piggieball'
 Session(app)
 
+
 def reset():
     admin,hospital1,hospital2,hospital3,hospital4 = Hospital(),Hospital(),Hospital(),Hospital(),Hospital()
     admin.setDataReady(True)
@@ -47,6 +48,7 @@ def getdeadline():
     next_week = today + datetime.timedelta(days=7)
     return next_week.strftime("%b %d %Y ")
 
+
 def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
@@ -54,8 +56,18 @@ def allowed_file(filename):
 
 
 UPLOAD_FOLDER = 'data/'
-ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif', 'zip','rdata','Rdata','csv','xslx'}
+ARCHIVED_FOLDER = 'archived_data/'
+ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif', 'zip','rdata','Rdata','csv','xslx','r','R'}
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+app.config['ARCHIVED_FOLDER'] = ARCHIVED_FOLDER 
+
+if not os.path.isdir(app.config['UPLOAD_FOLDER']):
+    os.system("mkdir  \'"+ os.path.join('app',app.config['UPLOAD_FOLDER'])+ "\'")
+
+if not os.path.isdir(app.config['ARCHIVED_FOLDER']):
+    os.system("mkdir  \'"+ os.path.join('app',app.config['ARCHIVED_FOLDER'])+ "\'")
+
+
 
 
 global username
@@ -80,7 +92,7 @@ def download(username):
     if not os.path.isdir(dirname):
         flash("You are the first user, so you do not need to download data!")
         return redirect(url_for('userpage'))
-    os.system("rm "+ os.path.join(uploads,username+'.zip'))
+    os.system("rm  \'"+ os.path.join(uploads,username+'.zip')+ "\'")
     shutil.make_archive(dirname, 'zip', os.path.join(uploads,username))
     return send_from_directory(directory=uploads, path=username+'.zip')
 
@@ -105,8 +117,16 @@ def userpage():
             elif file and allowed_file(file.filename):
                 filename = secure_filename(file.filename)
                 dirname = os.path.join(current_app.root_path,app.config['UPLOAD_FOLDER'], username)
-                if not os.path.isdir(dirname):
-                    os.system("mkdir "+dirname)
+                archive_dirname =  os.path.join(current_app.root_path,app.config['ARCHIVED_FOLDER'], username)
+                archive_dirname_time = os.path.join(archive_dirname,datetime.datetime.now().strftime("%Y%m%d%H%M%S"))
+                if not os.path.isdir(archive_dirname):
+                    os.system("mkdir \'"+archive_dirname+"\'")
+
+                if os.path.isdir(dirname):
+                    os.system("mv \'"+dirname+"\' \'"+archive_dirname_time+"\'")
+                
+
+                os.system("mkdir \'"+dirname+"\'")
                 file.save(os.path.join(current_app.root_path,app.config['UPLOAD_FOLDER'], username,filename))
 
                 hospitals[username].setDataUploaded(True)
